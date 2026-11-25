@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # RideMatch
 
 RideMatch is a Java 25, Spring Boot 3, Maven application for coordinating shared taxi journeys within verified college and company communities.
@@ -98,3 +99,6 @@ Results score an exact destination at 70 points and a nearby-group destination a
 ## Web interface
 
 The Thymeleaf interface uses shared header, navigation, footer, and Bootstrap script fragments in `templates/fragments/layout.html`. A single responsive stylesheet and small form-interaction script live in `static/css/app.css` and `static/js/app.js`. The `/dashboard` page summarizes upcoming memberships, coordinator join requests, replacement invitations, and cancellation notifications. Ride matching remains explicit: users enter a route and time in the search form because RideMatch does not store route preferences. `/ride-requests` is the coordinator's pending request inbox and `/admin` is the administrator community overview. All displayed actions submit to the existing controller routes; no sample records are embedded in the pages.
+=======
+# RideMatch_CabSharing
+>>>>>>> 3e000d9f5a54ba11dfecbe935d2dca3c9a7494a0
