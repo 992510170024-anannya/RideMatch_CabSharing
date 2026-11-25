@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Create a ride')}"></head>
+<body><nav th:replace="~{fragments/layout :: navigation}"></nav>
+<main class="page-shell-narrow">
+  <header class="page-heading"><span class="eyebrow" th:text="${community.name}">Community</span><h1>Create a shared ride</h1><p>You will coordinate the group and count as its first confirmed passenger.</p></header>
+  <section class="card"><div class="card-body">
+    <form th:action="@{/communities/{id}/rides(id=${community.id})}" th:object="${rideCreateRequest}" method="post" data-loading>
+      <div class="mb-3"><label for="pickupLocation" class="form-label">Pickup location</label><input id="pickupLocation" th:field="*{pickupLocation}" class="form-control" required><div class="text-danger small" th:errors="*{pickupLocation}"></div></div>
+      <div class="mb-3"><label for="destination" class="form-label">Destination</label><input id="destination" th:field="*{destination}" class="form-control" required><div class="text-danger small" th:errors="*{destination}"></div></div>
+      <fieldset class="mb-3"><legend class="form-label mb-2">When are you travelling?</legend>
+        <div class="d-flex flex-wrap gap-2 mb-2">
+          <button class="btn btn-sm btn-outline-primary" type="button" data-date-choice="today">Today</button>
+          <button class="btn btn-sm btn-outline-primary" type="button" data-date-choice="tomorrow">Tomorrow</button>
+          <button class="btn btn-sm btn-outline-secondary" type="button" data-date-choice="custom">Choose date</button>
+        </div>
+        <div class="row"><div class="col-sm-6 mb-2"><label for="travelDate" class="form-label">Travel date</label><input id="travelDate" th:field="*{travelDate}" type="date" class="form-control" required><div class="text-danger small" th:errors="*{travelDate}"></div></div>
+          <div class="col-sm-6 mb-2"><label for="departureTime" class="form-label">Start time</label><input id="departureTime" th:field="*{departureTime}" type="time" class="form-control" required><div class="text-danger small" th:errors="*{departureTime}"></div></div></div>
+        <div class="d-flex flex-wrap gap-2 mb-2" aria-label="Common departure times">
+          <button class="btn btn-sm btn-outline-secondary" type="button" data-time-choice="now">Now</button>
+          <button class="btn btn-sm btn-outline-secondary" type="button" data-time-choice="10:00">10:00</button>
+          <button class="btn btn-sm btn-outline-secondary" type="button" data-time-choice="10:50">10:50</button>
+          <button class="btn btn-sm btn-outline-secondary" type="button" data-time-choice="12:00">12:00</button>
+          <button class="btn btn-sm btn-outline-secondary" type="button" data-time-choice="12:50">12:50</button>
+        </div>
+        <div class="form-check mb-2"><input class="form-check-input" type="checkbox" id="flexibleTime"><label class="form-check-label" for="flexibleTime">I can leave within a time range</label></div>
+        <div id="timeRangeField" class="mb-2" hidden><label for="departureTimeEnd" class="form-label">Latest departure time</label><input id="departureTimeEnd" th:field="*{departureTimeEnd}" type="time" class="form-control"><div class="form-text">Other members can match if their preferred time falls within your range.</div><div class="text-danger small" th:errors="*{departureTimeEnd}"></div></div>
+      </fieldset>
+      <div class="row"><div class="col-sm-6 mb-3"><label for="passengerCapacity" class="form-label">Maximum passengers</label><input id="passengerCapacity" th:field="*{passengerCapacity}" type="number" min="1" class="form-control" required><div class="form-text">Includes you as coordinator.</div><div class="text-danger small" th:errors="*{passengerCapacity}"></div></div>
+        <div class="col-sm-6 mb-3"><label for="estimatedTotalFare" class="form-label">Estimated total taxi fare (₹)</label><input id="estimatedTotalFare" th:field="*{estimatedTotalFare}" type="number" min="0.01" step="0.01" class="form-control" required><div class="text-danger small" th:errors="*{estimatedTotalFare}"></div></div></div>
+      <div class="mb-3"><label for="notes" class="form-label">Notes <span class="text-secondary">(optional)</span></label><textarea id="notes" th:field="*{notes}" rows="3" class="form-control"></textarea><div class="text-danger small" th:errors="*{notes}"></div></div>
+      <button class="btn btn-primary" type="submit">Create ride</button>
+    </form>
+  </div></section>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer><th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+<script th:src="@{/js/ride-schedule.js}" defer></script></body></html>

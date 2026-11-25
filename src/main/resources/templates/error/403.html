@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Access denied')}"></head>
+<body><nav th:replace="~{fragments/layout :: navigation}"></nav>
+<main class="page-shell-narrow"><section class="card"><div class="card-body p-4">
+  <span class="eyebrow">403 · Access denied</span><h1 class="h3 mt-2">This action is not available to your account</h1>
+  <p class="text-secondary">You may need an administrator role or approved membership in the ride's community.</p>
+  <a class="btn btn-primary" th:href="@{/dashboard}">Return to dashboard</a>
+</div></section></main>
+<footer th:replace="~{fragments/layout :: footer}"></footer><th:block th:replace="~{fragments/layout :: scripts}"></th:block></body></html>

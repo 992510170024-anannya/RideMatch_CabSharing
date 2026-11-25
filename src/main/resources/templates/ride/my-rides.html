@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('My rides')}"></head>
+<body><nav th:replace="~{fragments/layout :: navigation}"></nav>
+<main class="page-shell">
+  <header class="page-heading d-flex justify-content-between align-items-md-end flex-column flex-md-row gap-3"><div><span class="eyebrow">Your groups</span><h1>My rides</h1><p>Rides you coordinate or have requested to join.</p></div><a class="btn btn-primary" th:href="@{/rides/search}">Find a ride</a></header>
+  <div th:if="${rides.isEmpty()}" class="empty-state">No current rides. Search for a route or create a ride in one of your verified communities.</div>
+  <div class="row g-3" th:unless="${rides.isEmpty()}">
+    <div class="col-md-6 col-xl-4" th:each="entry : ${rides}">
+      <article class="card h-100"><div class="card-body d-flex flex-column">
+        <div class="d-flex justify-content-between gap-2"><span class="badge text-bg-light" th:text="${entry.ride.status}">OPEN</span><span class="badge" th:classappend="${entry.membershipStatus.name() == 'CONFIRMED'} ? ' badge-confirmed' : ' text-bg-warning'" th:text="${entry.membershipStatus}">CONFIRMED</span></div>
+        <h2 class="h5 route-line mt-3" th:text="|${entry.ride.pickupLocation} → ${entry.ride.destination}|">Route</h2>
+        <p class="small text-secondary" th:text="|${entry.ride.travelDate} at ${entry.ride.departureTime}|">Departure</p>
+        <p class="small">Confirmed passengers: <strong th:text="${entry.ride.passengerCapacity - entry.ride.availableSeats}">1</strong> · Seats open: <strong th:text="${entry.ride.availableSeats}">2</strong></p>
+        <div class="mt-auto"><span th:if="${entry.coordinator}" class="small text-secondary d-block mb-2">You coordinate this group.</span><a class="btn btn-outline-primary btn-sm" th:href="@{/rides/{id}/group(id=${entry.ride.id})}">Open ride details</a></div>
+      </div></article>
+    </div>
+  </div>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer><th:block th:replace="~{fragments/layout :: scripts}"></th:block></body></html>

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Communities')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navigation}"></nav>
+<main class="page-shell">
+  <header class="page-heading"><span class="eyebrow">Your verified network</span><h1>Communities</h1><p>Join your college or company community. An administrator approves membership before you can access its rides.</p></header>
+  <div th:if="${notice}" class="alert alert-success" role="status" th:text="${notice}"></div>
+  <div th:if="${param.communityRegistered}" class="alert alert-success" role="status">Community registered.</div>
+  <div th:if="${communities.isEmpty()}" class="empty-state">No communities have been registered yet.</div>
+  <div class="row g-3">
+    <div class="col-md-6 col-xl-4" th:each="community : ${communities}">
+      <article class="card h-100"><div class="card-body d-flex flex-column">
+        <span class="badge text-bg-light align-self-start" th:text="${community.type}">COLLEGE</span>
+        <h2 class="h5 mt-3" th:text="${community.name}">Community name</h2>
+        <div class="mt-auto pt-3" th:if="${verifiedCommunityIds.contains(community.id)}">
+          <span class="badge badge-confirmed mb-2">Verified member</span><br>
+          <a class="btn btn-primary btn-sm" th:href="@{/communities/{id}/rides/new(id=${community.id})}">Create a ride</a>
+        </div>
+        <form class="mt-auto pt-3" th:unless="${verifiedCommunityIds.contains(community.id)}"
+              th:action="@{/communities/{id}/membership-requests(id=${community.id})}" method="post" data-loading>
+          <button class="btn btn-outline-primary btn-sm" type="submit">Request membership</button>
+        </form>
+      </div></article>
+    </div>
+  </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer><th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body></html>

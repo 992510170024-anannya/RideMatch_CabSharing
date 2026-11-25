@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Admin dashboard')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navigation}"></nav>
+<main class="page-shell">
+  <header class="page-heading d-flex justify-content-between align-items-md-end flex-column flex-md-row gap-3">
+    <div><span class="eyebrow">Admin workspace</span><h1>Community control center</h1><p>Add communities, review access requests, and see who belongs to each group.</p></div>
+    <a class="btn btn-primary" th:href="@{/admin/communities/new}">+ Add community</a>
+  </header>
+  <div class="row g-3 mb-4">
+    <div class="col-md-6"><div class="metric-card"><span class="metric-value" th:text="${communities.size()}">0</span><span class="metric-label">Registered communities</span></div></div>
+    <div class="col-md-6"><div class="metric-card"><span class="metric-value" th:text="${requests.size()}">0</span><span class="metric-label">Membership requests awaiting review</span></div></div>
+  </div>
+  <section class="card mb-4"><div class="card-body">
+    <div class="section-title"><h2>Accept membership requests</h2><a class="btn btn-outline-primary btn-sm" th:href="@{/admin/community-memberships}">View requests</a></div>
+    <div th:if="${requests.isEmpty()}" class="empty-state">There are no membership requests to review.</div>
+    <div class="table-responsive" th:unless="${requests.isEmpty()}"><table class="table align-middle">
+      <thead><tr><th>Applicant</th><th>Community</th><th>Requested</th><th></th></tr></thead>
+      <tbody><tr th:each="request,iter : ${requests}" th:if="${iter.index < 5}">
+        <td><strong th:text="${request.memberName}">Member</strong><div class="small text-secondary" th:text="${request.memberEmail}">email</div></td>
+        <td th:text="${request.communityName}">Community</td>
+        <td th:text="${#temporals.format(request.requestedAt, 'd MMM yyyy')}">Date</td>
+        <td><a class="btn btn-outline-primary btn-sm" th:href="@{/admin/community-memberships}">Review</a></td>
+      </tr></tbody>
+    </table></div>
+  </div></section>
+  <section class="card"><div class="card-body">
+    <div class="section-title"><h2>All communities</h2><a class="small" th:href="@{/communities}">Member-facing page</a></div>
+    <div th:if="${communities.isEmpty()}" class="empty-state">No communities have been registered.</div>
+    <div class="row g-3" th:unless="${communities.isEmpty()}"><div class="col-md-6 col-xl-4" th:each="community : ${communities}">
+      <article class="border rounded-4 bg-white p-3 h-100 d-flex flex-column">
+        <span class="eyebrow" th:text="${community.type}">COLLEGE</span>
+        <h3 class="h5 mt-2" th:text="${community.name}">Community</h3>
+        <p class="small text-secondary mb-3">View approved members and pending requests.</p>
+        <a class="btn btn-outline-primary btn-sm align-self-start mt-auto" th:href="@{/admin/communities/{id}(id=${community.id})}">View community</a>
+      </article>
+    </div></div>
+  </div></section>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

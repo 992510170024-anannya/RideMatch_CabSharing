@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Matching rides')}"></head>
+<body><nav th:replace="~{fragments/layout :: navigation}"></nav>
+<main class="page-shell">
+  <header class="page-heading"><span class="eyebrow">Your route search</span><h1>Compatible rides</h1><p>Results are ranked by destination compatibility and departure-time closeness.</p></header>
+  <div th:if="${matches.isEmpty()}" class="empty-state">No rides matched those details. Try another departure time or destination spelling, or create a ride for your route.</div>
+  <div class="row g-3" th:unless="${matches.isEmpty()}">
+    <div class="col-md-6 col-xl-4" th:each="match : ${matches}">
+      <article class="card h-100"><div class="card-body d-flex flex-column">
+        <div class="d-flex justify-content-between gap-2"><span class="eyebrow">Compatible ride</span><span class="badge text-bg-primary" th:text="|Score ${match.compatibilityScore}|">Score</span></div>
+        <h2 class="h5 route-line mt-3" th:text="|${match.pickupLocation} → ${match.destination}|">Ride route</h2>
+        <p class="small text-secondary mb-1"><span th:text="|${match.travelDate} at ${match.departureTime}|">Departure</span><span th:if="${match.departureTimeEnd != null}" th:text="| – ${match.departureTimeEnd}|"></span></p>
+        <p class="mb-1"><strong th:text="${match.availableSeats}">2</strong> seats open <span class="text-secondary">of <span th:text="${match.passengerCapacity}">4</span></span></p>
+        <p class="mb-1">Estimated total <strong th:text="|₹${match.estimatedTotalFare}|">₹0.00</strong></p>
+        <p class="small text-secondary mb-2" th:text="${match.compatibilityReason}">Why this matches</p>
+        <p th:if="${match.notes != null}" class="small mb-0"><strong>Notes:</strong> <span th:text="${match.notes}">Notes</span></p>
+        <div class="d-flex gap-2 mt-auto pt-3">
+          <a class="btn btn-outline-primary btn-sm" th:href="@{/rides/{id}/group(id=${match.rideId})}">Ride details</a>
+          <form data-loading th:action="@{/rides/{id}/join(id=${match.rideId})}" method="post"><button class="btn btn-primary btn-sm" type="submit">Request to join</button></form>
+        </div>
+      </div></article>
+    </div>
+  </div>
+  <a class="btn btn-link px-0 mt-3" th:href="@{/rides/search}">← Refine search</a>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer><th:block th:replace="~{fragments/layout :: scripts}"></th:block></body></html>

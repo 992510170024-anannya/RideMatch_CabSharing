@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Membership review')}"></head>
+<body><nav th:replace="~{fragments/layout :: navigation}"></nav>
+<main class="page-shell">
+  <header class="page-heading"><span class="eyebrow">Administration</span><h1>Pending membership requests</h1><p>Review requests to verify access to a college or company community.</p></header>
+  <div th:if="${param.reviewed}" class="alert alert-success" role="status">Membership request reviewed.</div>
+  <div th:if="${requests.isEmpty()}" class="empty-state">There are no pending requests.</div>
+  <div class="table-responsive bg-white" th:unless="${requests.isEmpty()}">
+    <table class="table align-middle"><thead><tr><th>Member</th><th>Email</th><th>Community</th><th>Requested</th><th>Actions</th></tr></thead>
+      <tbody><tr th:each="request : ${requests}">
+        <td th:text="${request.memberName}">Member</td><td th:text="${request.memberEmail}">email</td>
+        <td th:text="${request.communityName}">Community</td><td th:text="${#temporals.format(request.requestedAt, 'd MMM yyyy · HH:mm')}">Date</td>
+        <td><div class="d-flex gap-2">
+          <form data-confirm="Approve this member's community access?" data-loading th:action="@{/admin/community-memberships/{id}/approve(id=${request.id})}" method="post"><button class="btn btn-success btn-sm" type="submit">Approve</button></form>
+          <form data-confirm="Reject this membership request?" data-loading th:action="@{/admin/community-memberships/{id}/reject(id=${request.id})}" method="post"><button class="btn btn-outline-danger btn-sm" type="submit">Reject</button></form>
+        </div></td>
+      </tr></tbody>
+    </table>
+  </div>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer><th:block th:replace="~{fragments/layout :: scripts}"></th:block></body></html>

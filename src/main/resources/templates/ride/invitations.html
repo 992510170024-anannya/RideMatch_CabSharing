@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Replacement invitations')}"></head>
+<body><nav th:replace="~{fragments/layout :: navigation}"></nav>
+<main class="page-shell">
+  <header class="page-heading"><span class="eyebrow">A seat opened</span><h1>Replacement invitations</h1><p>Accepting confirms a seat. Declining passes the invitation to another verified community member.</p></header>
+  <div th:if="${invitations.isEmpty()}" class="empty-state">You have no active replacement invitations.</div>
+  <div class="row g-3" th:unless="${invitations.isEmpty()}"><div class="col-md-6 col-xl-4" th:each="invitation : ${invitations}">
+    <article class="card h-100"><div class="card-body d-flex flex-column"><span class="badge badge-confirmed align-self-start">Seat available</span>
+      <h2 class="h5 route-line mt-3" th:text="|${invitation.pickupLocation} → ${invitation.destination}|">Route</h2>
+      <p class="mb-1" th:text="|${invitation.travelDate} at ${invitation.departureTime}|">Departure</p>
+      <p class="small text-secondary" th:text="|Coordinator: ${invitation.coordinatorName}|">Coordinator</p>
+      <p class="small text-secondary">No seat is confirmed until you accept. The invite may expire after the replacement search timeout.</p>
+      <div class="d-flex gap-2 mt-auto">
+        <form data-confirm="Accept this replacement invitation and confirm the seat?" data-loading th:action="@{/rides/{rideId}/memberships/{membershipId}/accept-invitation(rideId=${invitation.rideId},membershipId=${invitation.membershipId})}" method="post"><button class="btn btn-primary btn-sm" type="submit">Accept invitation</button></form>
+        <form data-confirm="Decline this invitation? Another member may be invited." data-loading th:action="@{/rides/{rideId}/memberships/{membershipId}/decline-invitation(rideId=${invitation.rideId},membershipId=${invitation.membershipId})}" method="post"><button class="btn btn-outline-secondary btn-sm" type="submit">Decline</button></form>
+      </div>
+    </div></article>
+  </div></div>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer><th:block th:replace="~{fragments/layout :: scripts}"></th:block></body></html>

@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Find a ride')}"></head>
+<body><nav th:replace="~{fragments/layout :: navigation}"></nav>
+<main class="page-shell-narrow">
+  <header class="page-heading"><span class="eyebrow">Route matching</span><h1>Find a compatible ride</h1><p>Searches include rides in a community where your membership is approved.</p></header>
+  <div th:if="${verifiedCommunities.isEmpty()}" class="alert alert-info">You need an approved community before searching. <a th:href="@{/communities}">Browse communities</a>.</div>
+  <section class="card" th:unless="${verifiedCommunities.isEmpty()}"><div class="card-body">
+    <form th:action="@{/rides/search}" th:object="${rideSearchRequest}" method="post" data-loading>
+      <div class="mb-3"><label for="communityId" class="form-label">Community</label>
+        <select id="communityId" th:field="*{communityId}" class="form-select" required><option value="">Choose a verified community</option><option th:each="community : ${verifiedCommunities}" th:value="${community.id}" th:text="${community.name}"></option></select>
+        <div class="text-danger small" th:errors="*{communityId}"></div></div>
+      <div class="mb-3"><label for="pickupLocation" class="form-label">Pickup location</label><input id="pickupLocation" th:field="*{pickupLocation}" class="form-control" required><div class="text-danger small" th:errors="*{pickupLocation}"></div></div>
+      <div class="mb-3"><label for="destination" class="form-label">Destination</label><input id="destination" th:field="*{destination}" class="form-control" required><div class="text-danger small" th:errors="*{destination}"></div></div>
+      <div class="row"><div class="col-sm-6 mb-3"><label for="travelDate" class="form-label">Travel date</label><input id="travelDate" th:field="*{travelDate}" type="date" class="form-control" required><div class="text-danger small" th:errors="*{travelDate}"></div></div>
+        <div class="col-sm-6 mb-3"><label for="departureTime" class="form-label">Desired departure time</label><input id="departureTime" th:field="*{departureTime}" type="time" class="form-control" required><div class="text-danger small" th:errors="*{departureTime}"></div></div></div>
+      <button class="btn btn-primary" type="submit">Search rides</button>
+    </form>
+  </div></section>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer><th:block th:replace="~{fragments/layout :: scripts}"></th:block></body></html>

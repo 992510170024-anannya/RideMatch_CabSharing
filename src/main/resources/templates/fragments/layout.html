@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(pageTitle)">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102a43">
+  <title th:text="|${pageTitle} · RideMatch|">RideMatch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<nav th:fragment="navigation" class="navbar navbar-expand-lg app-navbar sticky-top">
+  <div class="container">
+    <a class="navbar-brand brand-lockup" th:href="@{/dashboard}">
+      <span class="brand-mark" aria-hidden="true">R</span><span>RideMatch</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavigation"
+            aria-controls="mainNavigation" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNavigation">
+      <div class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+        <a class="nav-link" th:href="@{/dashboard}">Dashboard</a>
+        <a class="nav-link" th:href="@{/communities}">Communities</a>
+        <a class="nav-link" th:href="@{/rides/search}">Find a ride</a>
+        <a class="nav-link" th:href="@{/rides/my-rides}">My rides</a>
+        <a class="nav-link" th:href="@{/ride-requests}">Requests</a>
+        <a class="nav-link" th:href="@{/ride-invitations}">Invitations</a>
+        <a class="nav-link" th:href="@{/notifications}">Notifications</a>
+        <a class="nav-link" th:href="@{/profile}">Profile</a>
+        <a class="nav-link" th:if="${isAdmin}" th:href="@{/admin}">Admin</a>
+        <form th:action="@{/logout}" method="post" class="ms-lg-2">
+          <button class="btn btn-outline-light btn-sm" type="submit">Sign out</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<nav th:fragment="publicNavigation" class="navbar navbar-expand-lg app-navbar">
+  <div class="container">
+    <a class="navbar-brand brand-lockup" th:href="@{/}">
+      <span class="brand-mark" aria-hidden="true">R</span><span>RideMatch</span>
+    </a>
+    <div class="ms-auto d-flex gap-2" th:if="${signedIn}">
+      <a class="btn btn-outline-light btn-sm" th:href="@{/communities}">Communities</a>
+      <a class="btn btn-accent btn-sm" th:href="@{/dashboard}">Dashboard</a>
+    </div>
+    <div class="ms-auto d-flex gap-2" th:unless="${signedIn}">
+      <a class="btn btn-link text-white text-decoration-none" th:href="@{/auth/login}">Sign in</a>
+      <a class="btn btn-accent btn-sm" th:href="@{/auth/register}">Create account</a>
+    </div>
+  </div>
+</nav>
+
+<footer th:fragment="footer" class="app-footer mt-auto">
+  <div class="container d-flex flex-column flex-sm-row justify-content-between gap-2">
+    <span>RideMatch <span aria-hidden="true">·</span> Community rides, coordinated together.</span>
+    <a th:href="@{/}">How RideMatch works</a>
+  </div>
+</footer>
+
+<th:block th:fragment="scripts">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script th:src="@{/js/app.js}" defer></script>
+</th:block>
+</body>
+</html>

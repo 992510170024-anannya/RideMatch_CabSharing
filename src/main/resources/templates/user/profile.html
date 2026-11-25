@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Profile')}"></head>
+<body><nav th:replace="~{fragments/layout :: navigation}"></nav>
+<main class="page-shell-narrow">
+  <header class="page-heading"><span class="eyebrow">Account settings</span><h1>Your profile</h1><p>Update your display name and sign-in email.</p></header>
+  <div th:if="${param.updated}" class="alert alert-success" role="status">Profile updated.</div>
+  <section class="card"><div class="card-body">
+    <div class="d-flex justify-content-between align-items-center mb-4"><div><div class="small text-secondary">Account role</div><span class="badge text-bg-light" th:text="${profile.role}">USER</span></div><div class="brand-mark" aria-hidden="true" th:text="${#strings.substring(profile.fullName,0,1)}">U</div></div>
+    <form th:action="@{/profile}" th:object="${profileUpdateRequest}" method="post" data-loading>
+      <div class="mb-3"><label for="fullName" class="form-label">Full name</label><input id="fullName" th:field="*{fullName}" class="form-control" autocomplete="name" required><div class="text-danger small" th:errors="*{fullName}"></div></div>
+      <div class="mb-3"><label for="email" class="form-label">Email</label><input id="email" th:field="*{email}" type="email" class="form-control" autocomplete="email" required><div class="text-danger small" th:errors="*{email}"></div></div>
+      <button class="btn btn-primary" type="submit">Save profile</button>
+    </form>
+  </div></section>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer><th:block th:replace="~{fragments/layout :: scripts}"></th:block></body></html>

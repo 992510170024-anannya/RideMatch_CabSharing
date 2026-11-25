@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Community members')}"></head>
+<body><nav th:replace="~{fragments/layout :: navigation}"></nav>
+<main class="page-shell">
+  <header class="page-heading d-flex justify-content-between align-items-md-end flex-column flex-md-row gap-3">
+    <div><span class="eyebrow" th:text="${community.type}">COLLEGE</span><h1 th:text="${community.name}">Community</h1><p>Review members and open requests for this community.</p></div>
+    <a class="btn btn-primary" th:href="@{/admin/community-memberships}">Review requests (<span th:text="${pendingCount}">0</span>)</a>
+  </header>
+  <section class="card"><div class="card-body">
+    <div class="section-title"><h2>Approved members</h2><span class="badge text-bg-light" th:text="${members.size()} + ' members'">0 members</span></div>
+    <div th:if="${members.isEmpty()}" class="empty-state">No members have been approved yet.</div>
+    <div class="table-responsive" th:unless="${members.isEmpty()}"><table class="table align-middle">
+      <thead><tr><th>Name</th><th>Email</th><th>Joined</th></tr></thead>
+      <tbody><tr th:each="member : ${members}">
+        <td th:text="${member.memberName}">Member</td><td th:text="${member.memberEmail}">Email</td>
+        <td th:text="${#temporals.format(member.requestedAt, 'd MMM yyyy')}">Date</td>
+      </tr></tbody>
+    </table></div>
+  </div></section>
+  <a class="btn btn-link mt-3" th:href="@{/admin}">← Back to admin home</a>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer><th:block th:replace="~{fragments/layout :: scripts}"></th:block></body></html>

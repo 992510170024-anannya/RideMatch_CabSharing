@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Notifications')}"></head>
+<body><nav th:replace="~{fragments/layout :: navigation}"></nav>
+<main class="page-shell-narrow">
+  <header class="page-heading"><span class="eyebrow">Ride updates</span><h1>Notifications</h1><p>New community rides, membership decisions, group changes, and cancellation updates.</p></header>
+  <div th:if="${notice}" class="alert alert-success" role="status" th:text="${notice}"></div>
+  <div th:if="${notifications.isEmpty()}" class="empty-state">You have no notifications yet.</div>
+  <div class="list-group" th:unless="${notifications.isEmpty()}">
+    <article class="list-group-item mb-2" th:each="notification : ${notifications}">
+      <div class="d-flex justify-content-between gap-3 flex-wrap"><div class="flex-grow-1">
+        <div class="d-flex flex-wrap gap-2 align-items-center"><strong th:text="${notification.title}">Title</strong><span class="badge text-bg-light" th:text="${notification.type}">RIDE_UPDATE</span><span th:if="${notification.readAt == null}" class="badge text-bg-primary">New</span></div>
+        <p class="mb-1 mt-2" th:text="${notification.message}">Message</p>
+        <small class="text-secondary" th:text="${#temporals.format(notification.createdAt, 'd MMM yyyy · HH:mm')}">Time</small>
+        <a th:if="${notification.rideId != null}" class="small ms-2" th:href="@{/rides/{id}/group(id=${notification.rideId})}">Open ride group</a>
+      </div>
+      <form th:if="${notification.readAt == null}" data-loading th:action="@{/notifications/{id}/read(id=${notification.id})}" method="post"><button class="btn btn-outline-secondary btn-sm" type="submit">Mark read</button></form></div>
+    </article>
+  </div>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer><th:block th:replace="~{fragments/layout :: scripts}"></th:block></body></html>

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Join requests')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navigation}"></nav>
+<main class="page-shell">
+  <header class="page-heading"><span class="eyebrow">Coordinator tools</span><h1>Join requests</h1><p>Review requests for rides you coordinate. Approval confirms a seat and refreshes the estimated fare split.</p></header>
+  <div th:if="${requests.isEmpty()}" class="empty-state">No pending passenger requests. New requests from verified community members will appear here.</div>
+  <div class="row g-3" th:unless="${requests.isEmpty()}">
+    <div class="col-lg-6" th:each="request : ${requests}">
+      <article class="card h-100"><div class="card-body">
+        <div class="d-flex justify-content-between gap-2"><span class="badge text-bg-light" th:text="${request.communityName}">Community</span><span class="badge text-bg-warning">Awaiting review</span></div>
+        <h2 class="h5 mt-3" th:text="${request.requesterName}">Passenger</h2>
+        <p class="route-line mb-1" th:text="|${request.pickupLocation} → ${request.destination}|">Route</p>
+        <p class="small text-secondary" th:text="${#temporals.format(request.requestedTime, 'EEE, d MMM yyyy · HH:mm')}">Departure</p>
+        <div class="d-flex gap-2 flex-wrap">
+          <form data-confirm="Approve this request and confirm a passenger seat?" data-loading th:action="@{/rides/{rideId}/memberships/{membershipId}/approve(rideId=${request.rideId},membershipId=${request.membershipId})}" method="post">
+            <button class="btn btn-success btn-sm" type="submit">Approve request</button>
+          </form>
+          <form data-confirm="Decline this join request?" data-loading th:action="@{/rides/{rideId}/memberships/{membershipId}/reject(rideId=${request.rideId},membershipId=${request.membershipId})}" method="post">
+            <button class="btn btn-outline-secondary btn-sm" type="submit">Decline</button>
+          </form>
+          <a class="btn btn-outline-primary btn-sm" th:href="@{/rides/{id}/group(id=${request.rideId})}">Ride details</a>
+        </div>
+      </div></article>
+    </div>
+  </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

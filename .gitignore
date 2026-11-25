@@ -1,0 +1,13 @@
+.classpath
+.project
+.settings/
+.factorypath
+.idea/
+*.iml
+.env
+application-local.properties
+oracleJdk-*/
+target/
+tmp/
+output/
+*.zip

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Dashboard')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navigation}"></nav>
+<main class="page-shell">
+  <header class="page-heading d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3">
+    <div><span class="eyebrow">Your RideMatch</span><h1 th:text="|Good day, ${profile.fullName}|">Good day</h1>
+      <p>Plan a shared trip or pick up where your group left off. <span th:text="|${verifiedCommunities.size()} verified community(ies)|">Verified communities</span></p></div>
+    <div class="d-flex gap-2"><a class="btn btn-primary" th:href="@{/rides/search}">Find a ride</a><a class="btn btn-outline-primary" th:if="${!verifiedCommunities.isEmpty()}" th:href="@{/communities}">Create a ride</a></div>
+  </header>
+
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3"><div class="metric-card"><span class="metric-value" th:text="${rides.size()}">0</span><span class="metric-label">Current group memberships</span></div></div>
+    <div class="col-6 col-lg-3"><div class="metric-card"><span class="metric-value" th:text="${createdRideCount}">0</span><span class="metric-label">Rides you coordinate</span></div></div>
+    <div class="col-6 col-lg-3"><div class="metric-card"><span class="metric-value" th:text="${pendingJoinRequests.size()}">0</span><span class="metric-label">Join requests</span></div></div>
+    <div class="col-6 col-lg-3"><div class="metric-card"><span class="metric-value" th:text="${invitations.size()}">0</span><span class="metric-label">Replacement invites</span></div></div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <section class="card mb-4"><div class="card-body">
+        <div class="section-title"><h2>Upcoming rides and groups</h2><a class="small" th:href="@{/rides/my-rides}">See all</a></div>
+        <div th:if="${rides.isEmpty()}" class="empty-state">You do not have a current ride yet. Search for a compatible ride or create one in an approved community.</div>
+        <div class="list-group list-group-flush" th:unless="${rides.isEmpty()}">
+          <article class="list-group-item px-0 py-3" th:each="entry,iter : ${rides}" th:if="${iter.index < 4}">
+            <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
+              <div><div class="route-line" th:text="|${entry.ride.pickupLocation} → ${entry.ride.destination}|">Route</div>
+                <div class="small text-secondary mt-1" th:text="|${entry.ride.travelDate} · ${entry.ride.departureTime}|">Departure</div>
+                <span class="badge mt-2" th:classappend="${entry.membershipStatus.name() == 'CONFIRMED'} ? ' badge-confirmed' : ' text-bg-light'" th:text="${entry.membershipStatus}">CONFIRMED</span>
+                <span class="small text-secondary ms-2" th:text="|${entry.ride.availableSeats} seats available|">Seats</span>
+              </div>
+              <a class="btn btn-outline-primary btn-sm" th:href="@{/rides/{id}/group(id=${entry.ride.id})}">Open group</a>
+            </div>
+          </article>
+        </div>
+      </div></section>
+
+      <section class="card"><div class="card-body">
+        <div class="section-title"><h2>Available matching rides</h2><a class="btn btn-primary btn-sm" th:href="@{/rides/search}">Search rides</a></div>
+        <div class="empty-state"><strong>No saved route preferences.</strong> Enter your pickup, destination, date, and time to see current compatible rides from your verified communities.</div>
+      </div></section>
+    </div>
+
+    <aside class="col-lg-4">
+      <section class="card mb-4"><div class="card-body">
+        <div class="section-title"><h2>Pending requests</h2><a class="small" th:href="@{/ride-requests}">Manage</a></div>
+        <div th:if="${pendingJoinRequests.isEmpty()}" class="empty-state">No passenger requests need your review.</div>
+        <div class="list-group list-group-flush" th:unless="${pendingJoinRequests.isEmpty()}">
+          <div class="list-group-item px-0" th:each="request,iter : ${pendingJoinRequests}" th:if="${iter.index < 3}">
+            <strong th:text="${request.requesterName}">Passenger</strong><div class="small text-secondary" th:text="|${request.pickupLocation} → ${request.destination}|">Route</div>
+            <a class="small" th:href="@{/rides/{id}/group(id=${request.rideId})}">Review request</a>
+          </div>
+        </div>
+      </div></section>
+
+      <section class="card mb-4"><div class="card-body">
+        <div class="section-title"><h2>Cancellation updates</h2><a class="small" th:href="@{/notifications}">All notices</a></div>
+        <div th:if="${cancellationUpdates.isEmpty()}" class="empty-state">Cancellation updates will appear here when your group changes.</div>
+        <div class="list-group list-group-flush" th:unless="${cancellationUpdates.isEmpty()}">
+          <div class="list-group-item px-0" th:each="notice,iter : ${cancellationUpdates}" th:if="${iter.index < 3}">
+            <strong th:text="${notice.title}">Cancellation</strong><p class="small text-secondary mb-1" th:text="${notice.message}">Update</p>
+            <a th:if="${notice.rideId != null}" class="small" th:href="@{/rides/{id}/group(id=${notice.rideId})}">Open group</a>
+          </div>
+        </div>
+      </div></section>
+
+      <section class="card"><div class="card-body">
+        <div class="section-title"><h2>Replacement invitations</h2><a class="small" th:href="@{/ride-invitations}">View</a></div>
+        <div th:if="${invitations.isEmpty()}" class="empty-state">No active replacement invitations.</div>
+        <div th:unless="${invitations.isEmpty()}" class="small" th:text="|You have ${invitations.size()} invitation(s) waiting for your response.|">Invitations waiting.</div>
+      </div></section>
+    </aside>
+  </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

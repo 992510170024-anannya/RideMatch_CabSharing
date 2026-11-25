@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Register community')}"></head>
+<body><nav th:replace="~{fragments/layout :: navigation}"></nav>
+<main class="page-shell-narrow">
+  <header class="page-heading"><span class="eyebrow">Administration</span><h1>Register a community</h1><p>Add a college or company so members can request verification.</p></header>
+  <section class="card"><div class="card-body">
+    <form th:action="@{/admin/communities}" th:object="${communityRegistrationRequest}" method="post" data-loading>
+      <div class="mb-3"><label for="name" class="form-label">College or company name</label>
+        <input id="name" th:field="*{name}" class="form-control" required aria-describedby="nameError"><div id="nameError" class="text-danger small" th:errors="*{name}"></div></div>
+      <div class="mb-3"><label for="type" class="form-label">Community type</label>
+        <select id="type" th:field="*{type}" class="form-select" required><option value="">Choose a type</option><option value="COLLEGE">College</option><option value="COMPANY">Company</option></select>
+        <div class="text-danger small" th:errors="*{type}"></div></div>
+      <button class="btn btn-primary" type="submit">Register</button>
+    </form>
+  </div></section>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer><th:block th:replace="~{fragments/layout :: scripts}"></th:block></body></html>

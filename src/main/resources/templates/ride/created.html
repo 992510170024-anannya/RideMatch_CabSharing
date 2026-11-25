@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Ride created')}"></head>
+<body><nav th:replace="~{fragments/layout :: navigation}"></nav>
+<main class="page-shell-narrow">
+  <div class="alert alert-success" role="status"><strong>Ride created.</strong> You are the coordinator and first confirmed passenger.</div>
+  <section class="card"><div class="card-body">
+    <span class="badge badge-confirmed" th:text="${createdRide.status}">OPEN</span>
+    <h1 class="h4 route-line mt-3" th:text="|${createdRide.pickupLocation} → ${createdRide.destination}|">Route</h1>
+    <p class="text-secondary" th:text="${community.name}">Community</p>
+    <p class="mb-1"><strong>Departure:</strong> <span th:text="|${createdRide.travelDate} at ${createdRide.departureTime}|">Date and time</span><span th:if="${createdRide.departureTimeEnd != null}" th:text="| – ${createdRide.departureTimeEnd}|"></span></p>
+    <p class="mb-1"><strong>Seats available:</strong> <span th:text="${createdRide.availableSeats}">1</span> of <span th:text="${createdRide.passengerCapacity}">3</span></p>
+    <p class="mb-1"><strong>Estimated total fare:</strong> <span th:text="|₹${createdRide.estimatedTotalFare}|">₹0.00</span></p>
+    <p th:if="${createdRide.notes != null}" class="mb-0"><strong>Notes:</strong> <span th:text="${createdRide.notes}">Notes</span></p>
+    <p class="small text-secondary mt-3 mb-0">Fare and contribution are estimates. The coordinator books the taxi externally.</p>
+  </div></section>
+  <div class="mt-3 d-flex gap-2 flex-wrap"><a class="btn btn-primary" th:href="@{/rides/{id}/group(id=${createdRide.id})}">Manage this group</a><a class="btn btn-outline-primary" th:href="@{/rides/search}">Find another ride</a><a class="btn btn-outline-secondary" th:href="@{/rides/my-rides}">My rides</a></div>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer><th:block th:replace="~{fragments/layout :: scripts}"></th:block></body></html>
